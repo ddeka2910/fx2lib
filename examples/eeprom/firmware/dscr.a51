@@ -43,6 +43,7 @@ ENDPOINT_TYPE_BULK=2
 ENDPOINT_TYPE_INT=3
 
     .globl	_dev_dscr, _dev_qual_dscr, _highspd_dscr, _fullspd_dscr, _dev_strings, _dev_strings_end
+    .globl      _dev_serial
 ; These need to be in code memory.  If
 ; they aren't you'll have to manully copy them somewhere
 ; in code memory otherwise SUDPTRH:L don't work right
@@ -56,12 +57,12 @@ _dev_dscr:
 	.db	0xff					  ; subclass (vendor specific)
 	.db	0xff					  ; protocol (vendor specific)
 	.db	64						  ; packet size (ep0)
-	.dw	0xb404			      ; vendor id 
-	.dw	0x8300					  ; product id
-	.dw	0x0100					  ; version id
-	.db	0		                  ; manufacturure str idx				
-	.db	1				          ; product str idx	
-	.db	0				          ; serial str idx 
+	.dw	0x192A			      ; vendor id 
+	.dw	0x4154					  ; product id
+	.dw	0x0200					  ; version id
+	.db	1		                  ; manufacturure str idx				
+	.db	2				          ; product str idx	
+	.db	3				          ; serial str idx 
 	.db	1			              ; n configurations
 dev_dscr_end:
 
@@ -251,26 +252,105 @@ _string0:
 string0end:
 ; add more strings here
 
-string1:
-    .db string1end-string1
-    .db DSCR_STRING_TYPE
-    .ascii 'U'
-    .db 0
-    .ascii 's'
-    .db 0
-    .ascii 'b'
-    .db 0
-    .ascii ' '
-    .db 0
-    .ascii 'T'
-    .db 0
-    .ascii 'e'
-    .db 0
-    .ascii 'r'
-    .db 0
-    .ascii 'm'
-    .db 0
+; Manufacture String - Numato
+_string1:
+	.db string1end-_string1
+	.db DSCR_STRING_TYPE
+	.ascii 'N'
+	.db 0
+	.ascii 'u'
+	.db 0
+	.ascii 'm'
+	.db 0
+	.ascii 'a'
+	.db 0
+	.ascii 't'
+	.db 0
+	.ascii 'o'
+	.db 0
 string1end:
+
+; Product String - Opsis (EEPROM Mode)
+_string2:
+	.db string2end-_string2
+	.db DSCR_STRING_TYPE
+	.ascii 'O'
+	.db 0
+	.ascii 'p'
+	.db 0
+	.ascii 's'
+	.db 0
+	.ascii 'i'
+	.db 0
+	.ascii 's'
+	.db 0
+	.ascii ' '
+	.db 0
+	.ascii '('
+	.db 0
+	.ascii 'E'
+	.db 0
+	.ascii 'E'
+	.db 0
+	.ascii 'P'
+	.db 0
+	.ascii 'R'
+	.db 0
+	.ascii 'O'
+	.db 0
+	.ascii 'M'
+	.db 0
+	.ascii ' '
+	.db 0
+	.ascii 'M'
+	.db 0
+	.ascii 'o'
+	.db 0
+	.ascii 'd'
+	.db 0
+	.ascii 'e'
+	.db 0
+	.ascii ')'
+	.db 0
+string2end:
+
+_string3:
+	.db string3end-_string3
+	.db DSCR_STRING_TYPE
+_dev_serial:
+	.ascii '0'
+	.db 0
+	.ascii '1'
+	.db 0
+	.ascii '2'
+	.db 0
+	.ascii '3'
+	.db 0
+	.ascii '4'
+	.db 0
+	.ascii '5'
+	.db 0
+	.ascii '6'
+	.db 0
+	.ascii '7'
+	.db 0
+	.ascii '8'
+	.db 0
+	.ascii '9'
+	.db 0
+	.ascii 'a'
+	.db 0
+	.ascii 'b'
+	.db 0
+	.ascii 'c'
+	.db 0
+	.ascii 'd'
+	.db 0
+	.ascii 'e'
+	.db 0
+	.ascii 'f'
+	.db 0
+string3end:
 
 _dev_strings_end:
     .dw 0x0000

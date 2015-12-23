@@ -88,5 +88,6 @@ def set_eeprom(prom):
 
 if __name__=='__main__':
 
-   openfx2(0x04b4,0x0083) # vid/pid of eeprom firmware 
+   openfx2(0x2A19,0x5441) # vid/pid of eeprom firmware 
+   print(repr(fetch_eeprom()))
 

@@ -35,9 +35,44 @@ volatile __bit dosud;
 __bit on;
 WORD count;
 
+char hex(BYTE value) {
+	if (value > 0x0f) {
+		return '?';
+	} else if (value > 0x09) {
+		return 'a'+(value-0x0a);
+	} else {
+		return '0'+value;
+	}
+}
+
+extern __xdata char dev_serial[];
+void _patch_serial_byte(BYTE index, BYTE value) {
+	dev_serial[index*4] = hex(value >> 4);
+	dev_serial[index*4+2] = hex(value & 0xf);
+}
+
+void patch_serial() {
+	BYTE tempbyte = 0;
+	dev_serial[0] = 'f';
+	eeprom_read(0x51, 0xf8, 1, &tempbyte);
+	_patch_serial_byte(0, tempbyte);
+	eeprom_read(0x51, 0xf8+1, 1, &tempbyte);
+	_patch_serial_byte(1, tempbyte);
+	eeprom_read(0x51, 0xf8+2, 1, &tempbyte);
+	_patch_serial_byte(2, tempbyte);
+	eeprom_read(0x51, 0xf8+3, 1, &tempbyte);
+	_patch_serial_byte(3, tempbyte);
+	eeprom_read(0x51, 0xf8+4, 1, &tempbyte);
+	_patch_serial_byte(4, tempbyte);
+	eeprom_read(0x51, 0xf8+5, 1, &tempbyte);
+	_patch_serial_byte(5, tempbyte);
+	eeprom_read(0x51, 0xf8+6, 1, &tempbyte);
+	_patch_serial_byte(6, tempbyte);
+	eeprom_read(0x51, 0xf8+7, 1, &tempbyte);
+	_patch_serial_byte(7, tempbyte);
+}
 
 void main() {
-
  REVCTL = 0; // not using advanced endpoint controls
 
  dosud=FALSE;
@@ -50,6 +85,7 @@ void main() {
 
  SETCPUFREQ(CLK_48M);
  sio0_init(57600); // needed for printf on sio0 
+ patch_serial();
  
  
  USE_USB_INTS();
