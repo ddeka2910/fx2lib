@@ -117,9 +117,16 @@ BOOL handle_get_descriptor() {
 #define VC_EEPROM 0xb1
         
 BOOL handle_vendorcommand(BYTE cmd) {
+ BYTE prom_addr=0;
  WORD addr=SETUP_VALUE(),len=SETUP_LENGTH();
  printf ( "Handle Vendor Command %02x, addr %d, len %d\n" , cmd, addr, len );
+ if (EEPROM_TWO_BYTE) {
+     prom_addr=0x51;
+ } else {
+     prom_addr=0x50;
+ }
  switch (cmd) {
+
     case VC_EEPROM:
         {            
             // wait for ep0 not busy
@@ -128,7 +135,7 @@ BOOL handle_vendorcommand(BYTE cmd) {
                  while (len) { // still have bytes to read
                     BYTE cur_read = len > 64 ? 64 : len; // can't read more than 64 bytes at a time
                     while (EP0CS&bmEPBUSY); // can't do this until EP0 is ready                
-                    eeprom_read(0x51, addr, cur_read, EP0BUF );
+                    eeprom_read(prom_addr, addr, cur_read, EP0BUF );
                     EP0BCH=0;
                     SYNCDELAY;
                     EP0BCL=cur_read;
@@ -144,7 +151,7 @@ BOOL handle_vendorcommand(BYTE cmd) {
                    while(EP0CS & bmEPBUSY); // wait
                    cur_write=EP0BCL;
 //                   printf ( "Writing %d Bytes to %d..\n", cur_write, addr );
-                   if ( !eeprom_write(0x51, addr, cur_write, EP0BUF ) ) return FALSE;
+                   if ( !eeprom_write(prom_addr, addr, cur_write, EP0BUF ) ) return FALSE;
                    addr += cur_write;
                    len -= cur_write;
                 }
