@@ -1,6 +1,8 @@
-Before building this library, you need have sdcc installed and in your path.
-
-http://sdcc.sf.net
+Before building this library, you need have sdcc installed and in
+your path.  It is available from http://sdcc.sf.net and packages are
+shipping with an array of Linux distributions (Debian and derivatives,
+SuSE). The test routines also demand for header files of libusb 1.0
+(shipping with Debian as libusb-1.0-0-dev).
 
 To build this library, run make
 
@@ -8,7 +10,8 @@ To build this library, run make
 
 This produces lib/fx2.lib.  You can also run make in the lib folder.
 
-You can also build the documentation if you have doxygen installed.
+You can also build the documentation if you have doxygen installed
+(Debian packages doxygen and rubber).
 
 > make docs
 
